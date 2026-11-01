@@ -21,4 +21,5 @@ def validate_transfer(amount: Decimal, sent_today: Decimal = Decimal("0")) -> No
     """Reject transfers that break Fernhill's rules."""
     if amount <= 0:
         raise InvalidTransfer("amount must be positive")
-    # FP-142: enforce DAILY_LIMIT using sent_today.
+    if sent_today + amount > DAILY_LIMIT:
+        raise LimitExceeded("daily transfer limit exceeded")
